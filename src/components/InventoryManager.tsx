@@ -45,6 +45,7 @@ export function InventoryManager({
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [stockChange, setStockChange] = useState<number>(0);
   const [adjustReason, setAdjustReason] = useState('Restock');
+  const [lowStockThreshold, setLowStockThreshold] = useState<number>(10);
 
   // Bulk Upload Specific State
   const [bulkInputText, setBulkInputText] = useState('');
@@ -240,38 +241,57 @@ export function InventoryManager({
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredProducts.length > 0 ? (
-                  filteredProducts.map(product => (
-                    <tr key={product.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <p className="font-bold text-brand-dark">{product.name}</p>
-                        <p className="text-xs text-slate-400 capitalize">{product.category}</p>
-                      </td>
-                      <td className="px-6 py-4 font-mono text-xs text-slate-500">{product.sku}</td>
-                      <td className="px-6 py-4 font-bold text-slate-700">${(product.price / 100).toFixed(2)}</td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${product.stock < 10 ? 'bg-brand-red/10 text-brand-red' : 'bg-brand-green/10 text-brand-green'}`}>
-                          {product.stock} {t.inventory.units}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <button 
-                            onClick={() => setSelectedProduct(product)}
-                            className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors"
-                            title={t.inventory.adjustStock}
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
-                          <button 
-                            onClick={() => onDeleteProduct(product.id)}
-                            className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                  filteredProducts.map(product => {
+                    const isLowStock = product.stock <= lowStockThreshold;
+                    return (
+                      <tr 
+                        key={product.id} 
+                        className={`transition-colors duration-150 ${
+                          isLowStock 
+                            ? 'bg-amber-50/40 hover:bg-amber-100/30' 
+                            : 'hover:bg-slate-50'
+                        }`}
+                      >
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-bold text-brand-dark">{product.name}</span>
+                              {isLowStock && (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 text-[10px] font-black uppercase tracking-wider border border-rose-100 animate-pulse">
+                                  <AlertCircle className="w-3 h-3" /> Warning
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-xs text-slate-400 capitalize font-medium">{product.category}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 font-mono text-xs text-slate-500">{product.sku}</td>
+                        <td className="px-6 py-4 font-bold text-slate-700">${(product.price / 100).toFixed(2)}</td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${isLowStock ? 'bg-brand-red/10 text-brand-red' : 'bg-brand-green/10 text-brand-green'}`}>
+                            {product.stock} {t.inventory.units}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <button 
+                              onClick={() => setSelectedProduct(product)}
+                              className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors"
+                              title={t.inventory.adjustStock}
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => onDeleteProduct(product.id)}
+                              className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan={5} className="px-6 py-10 text-center text-slate-400 italic">
@@ -337,20 +357,69 @@ export function InventoryManager({
           </AnimatePresence>
 
           <div className="bg-brand-dark p-6 rounded-3xl text-white">
-            <div className="flex items-center gap-3 mb-4">
-              <AlertCircle className="w-6 h-6 text-brand-red animate-pulse" />
-              <h3 className="font-bold">{t.inventory.lowStockAlerts}</h3>
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-brand-red animate-pulse" />
+                <h3 className="font-bold text-sm tracking-tight">{t.inventory.lowStockAlerts}</h3>
+              </div>
+              
+              <div className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-xl border border-white/5">
+                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Warn:</span>
+                <input 
+                  type="number"
+                  min="0"
+                  max="500"
+                  value={lowStockThreshold}
+                  onChange={(e) => setLowStockThreshold(Math.max(0, parseInt(e.target.value) || 0))}
+                  className="w-10 bg-transparent text-center font-bold text-xs text-white outline-none border-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:ring-0"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <button 
+                    type="button"
+                    onClick={() => setLowStockThreshold(prev => prev + 1)}
+                    className="text-[9px] text-white/75 hover:text-white px-0.5 leading-none"
+                  >
+                    ▲
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setLowStockThreshold(prev => Math.max(0, prev - 1))}
+                    className="text-[9px] text-white/75 hover:text-white px-0.5 leading-none"
+                  >
+                    ▼
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="space-y-3">
-              {products.filter(p => p.stock < 10).length > 0 ? (
-                products.filter(p => p.stock < 10).map(p => (
+
+            {/* Slider control to interactively define the warning threshold */}
+            <div className="mb-4 bg-white/5 p-3 rounded-2xl border border-white/5 space-y-1.5 text-xs">
+              <div className="flex justify-between text-[10px] text-white/60 font-semibold">
+                <span>Alert at &le; {lowStockThreshold} units</span>
+                <span>Max: 100</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={lowStockThreshold}
+                onChange={(e) => setLowStockThreshold(parseInt(e.target.value) || 0)}
+                className="w-full accent-brand-green bg-white/10 h-1 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
+
+            <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+              {products.filter(p => p.stock <= lowStockThreshold).length > 0 ? (
+                products.filter(p => p.stock <= lowStockThreshold).map(p => (
                   <div key={p.id} className="bg-white/10 px-4 py-3 rounded-2xl flex items-center justify-between">
-                    <span className="text-sm font-medium truncate max-w-[120px]">{p.name}</span>
-                    <span className="bg-brand-red/80 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">{p.stock} {t.dashboard.itemsLow}</span>
+                    <span className="text-sm font-medium truncate max-w-[130px]">{p.name}</span>
+                    <span className="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+                      {p.stock} {t.dashboard.itemsLow}
+                    </span>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-white/60 italic">{t.inventory.noLowStock}</p>
+                <p className="text-xs text-white/60 italic text-center py-4">{t.inventory.noLowStock}</p>
               )}
             </div>
           </div>

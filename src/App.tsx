@@ -56,9 +56,9 @@ export default function App() {
       console.error(err);
       if (err.code === 'auth/operation-not-allowed') {
         // If they did indeed try the admin email, we can try matching immediately, but we already catch that inside useAuth!
-        setAuthError('Email/password registration is not enabled in Firebase. Please click "Autofill Admin Preset" below for instant bypass!');
+        setAuthError('Email/password registration is not enabled in Firebase. Please enter valid administrative or active trader credentials.');
       } else if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setAuthError('Invalid email or password. Use "Autofill Admin Preset" below to test automatically.');
+        setAuthError('Invalid email or password. Please verify your administrative credentials.');
       } else if (err.code === 'auth/weak-password') {
         setAuthError('Password is too weak. Must be at least 6 characters.');
       } else if (err.code === 'auth/email-already-in-use') {
@@ -561,30 +561,6 @@ export default function App() {
               {isRegistering ? 'Create Active Account' : 'Authenticate Credentials'}
             </button>
           </form>
-
-          {/* Quick preset credentials autofill for user testing */}
-          <div className="mt-6 pt-5 border-t border-dashed border-slate-200">
-            <button
-              type="button"
-              onClick={handleAutofillAdmin}
-              className="w-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 py-3 px-4 rounded-xl text-left transition-all flex items-start gap-3 cursor-pointer group"
-            >
-              <span className="text-lg shrink-0 mt-0.5">🔑</span>
-              <div>
-                <div className="text-[11px] font-black uppercase tracking-wider text-amber-800 flex items-center gap-1">
-                  Autofill Admin Preset
-                  <span className="group-hover:translate-x-1 transition-transform inline-block text-[10px]">→</span>
-                </div>
-                <div className="text-[11px] font-semibold text-slate-600 mt-0.5">
-                  Click to log in as administrative supervisor:
-                </div>
-                <div className="text-[10px] font-mono font-bold text-amber-900 mt-1">
-                  Email: Njoroge@biasharasasa.com<br />
-                  Pass: Biasharasasa123
-                </div>
-              </div>
-            </button>
-          </div>
         </motion.div>
       </div>
     );
@@ -693,6 +669,7 @@ export default function App() {
                     <POSDashboard 
                       products={products} 
                       onCheckout={handleCheckout} 
+                      orders={orders}
                     />
                   )}
                   {activeTab === 'settings' && (
