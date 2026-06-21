@@ -76,9 +76,9 @@ export const posOrderItems = pgTable('pos_order_items', {
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
-  traders: many(traders),
+  traders: many(traders, { relationName: 'userTraders' }),
   products: many(products),
-  posOrders: many(posOrders),
+  posOrders: many(posOrders, { relationName: 'userOrders' }),
 }));
 
 export const productsRelations = relations(products, ({ one, many }) => ({
@@ -87,20 +87,46 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     references: [users.id],
   }),
   logs: many(stockLogs),
+  orderItems: many(posOrderItems),
+}));
+
+export const stockLogsRelations = relations(stockLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [stockLogs.userId],
+    references: [users.id],
+  }),
+  product: one(products, {
+    fields: [stockLogs.productId],
+    references: [products.id],
+  }),
 }));
 
 export const posOrdersRelations = relations(posOrders, ({ one, many }) => ({
   owner: one(users, {
     fields: [posOrders.userId],
     references: [users.id],
+    relationName: 'userOrders',
   }),
-  items: many(posOrderItems),
+  items: many(posOrderItems, { relationName: 'orderItems' }),
+}));
+
+export const posOrderItemsRelations = relations(posOrderItems, ({ one }) => ({
+  order: one(posOrders, {
+    fields: [posOrderItems.orderId],
+    references: [posOrders.id],
+    relationName: 'orderItems',
+  }),
+  product: one(products, {
+    fields: [posOrderItems.productId],
+    references: [products.id],
+  }),
 }));
 
 export const tradersRelations = relations(traders, ({ one }) => ({
   owner: one(users, {
     fields: [traders.userId],
     references: [users.id],
+    relationName: 'userTraders',
   }),
 }));
 
