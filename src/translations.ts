@@ -132,7 +132,7 @@ export interface Translations {
 export const translations: Record<Language, Translations> = {
   en: {
     common: {
-      appName: "Biashara Sasa",
+      appName: "BIASHARASASA",
       loading: "Initializing platform...",
       signIn: "Sign In",
       signInDesc: "Smart trader onboarding and business management platform.",
@@ -156,7 +156,7 @@ export const translations: Record<Language, Translations> = {
     },
     dashboard: {
       overview: "System Overview",
-      overviewDesc: "Real-time performance metrics across all Biashara Sasa modules.",
+      overviewDesc: "Real-time performance metrics across all BIASHARASASA modules.",
       liveFeed: "Live Engine Feed",
       totalRevenue: "Total Revenue",
       activeTraders: "Active Traders",
@@ -260,7 +260,7 @@ export const translations: Record<Language, Translations> = {
   },
   fr: {
     common: {
-      appName: "Biashara Sasa",
+      appName: "BIASHARASASA",
       loading: "Initialisation de la plateforme...",
       signIn: "Se connecter",
       signInDesc: "Plateforme intelligente d'intégration des commerçants et de gestion d'entreprise.",
@@ -284,7 +284,7 @@ export const translations: Record<Language, Translations> = {
     },
     dashboard: {
       overview: "Aperçu du système",
-      overviewDesc: "Métriques de performance en temps réel sur tous les modules Biashara Sasa.",
+      overviewDesc: "Métriques de performance en temps réel sur tous les modules BIASHARASASA.",
       liveFeed: "Flux en direct",
       totalRevenue: "Chiffre d'affaires",
       activeTraders: "Commerçants actifs",
@@ -388,7 +388,7 @@ export const translations: Record<Language, Translations> = {
   },
   sw: {
     common: {
-      appName: "Biashara Sasa",
+      appName: "BIASHARASASA",
       loading: "Inatayarisha jukwaa...",
       signIn: "Ingia",
       signInDesc: "Jukwaa mahiri la kusajili wafanyabiashara na usimamizi wa biashara.",
@@ -412,7 +412,7 @@ export const translations: Record<Language, Translations> = {
     },
     dashboard: {
       overview: "Muhtasari wa Mfumo",
-      overviewDesc: "Vipimo vya utendaji vya wakati halisi katika moduli zote za Biashara Sasa.",
+      overviewDesc: "Vipimo vya utendaji vya wakati halisi katika moduli zote za BIASHARASASA.",
       liveFeed: "Mlisho wa Moja kwa Moja",
       totalRevenue: "Mapato Jumla",
       activeTraders: "Wanachama Hai",

@@ -405,7 +405,7 @@ export default function App() {
             ✓ Purchase Verified
           </span>
 
-          <h2 className="text-2xl font-black text-brand-dark tracking-tight">Biashara Sasa</h2>
+          <h2 className="text-2xl font-black text-brand-dark tracking-tight">BIASHARASASA</h2>
           <p className="text-slate-400 text-xs mt-1 font-semibold">Official Receipt Verification Portal</p>
 
           <div className="my-6 border-t border-slate-100"></div>
@@ -478,7 +478,7 @@ export default function App() {
           <div className="w-20 h-20 bg-brand-light-green rounded-[28px] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-brand-green/10 border border-brand-green/5 p-2 shrink-0">
             <PrimeAxisLogo className="w-full h-full" />
           </div>
-          <h1 className="text-3xl font-black text-brand-dark tracking-tight mb-2 text-center">Biashara Sasa</h1>
+          <h1 className="text-3xl font-black text-brand-dark tracking-tight mb-2 text-center">BIASHARASASA</h1>
           <p className="text-slate-500 mb-6 leading-relaxed font-semibold text-center text-sm">
             {t.common.signInDesc}
           </p>

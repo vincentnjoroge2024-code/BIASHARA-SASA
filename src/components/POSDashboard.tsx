@@ -281,7 +281,7 @@ export function POSDashboard({ products, onCheckout }: POSDashboardProps) {
         </head>
         <body>
           <div class="print-header">
-            <h2>🏪 Biashara Sasa</h2>
+            <h2>🏪 BIASHARASASA</h2>
             <p>123 Moi Avenue, Nairobi · +254 700 123 456</p>
             <p style="font-size:10px;">${dateStr} · ${timeStr}</p>
           </div>
