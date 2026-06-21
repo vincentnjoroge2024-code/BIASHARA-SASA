@@ -3,16 +3,17 @@ import { ShoppingCart, Plus, Minus, X, Trash2, CreditCard, Banknote, Smartphone,
 import { motion, AnimatePresence } from 'motion/react';
 import QRCode from 'qrcode';
 import { jsPDF } from 'jspdf';
-import { Product, POSOrder } from '../types';
+import { Product, POSOrder, UserRole } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface POSDashboardProps {
   products: Product[];
   onCheckout: (data: any) => Promise<POSOrder | null>;
   orders?: POSOrder[];
+  role?: UserRole;
 }
 
-export function POSDashboard({ products, onCheckout, orders = [] }: POSDashboardProps) {
+export function POSDashboard({ products, onCheckout, orders = [], role }: POSDashboardProps) {
   const { t, language } = useLanguage();
   const [cart, setCart] = useState<{ [id: number]: { product: Product; quantity: number } }>({});
   const [selectedCustomer, setSelectedCustomer] = useState('Walk-in Customer');
@@ -429,7 +430,11 @@ export function POSDashboard({ products, onCheckout, orders = [] }: POSDashboard
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10);
       doc.text("Invoice #", 20, 99);
-      doc.text("Customer Name", 55, 99);
+      if (role === 'back-office') {
+        doc.text("Seller/Trader", 55, 99);
+      } else {
+        doc.text("Customer Name", 55, 99);
+      }
       doc.text("Date & Time", 100, 99);
       doc.text("Method", 145, 99);
       doc.text("Amount", 175, 99);
@@ -450,13 +455,18 @@ export function POSDashboard({ products, onCheckout, orders = [] }: POSDashboard
           doc.setTextColor(80, 80, 80);
           doc.text(order.orderNumber || `TRN-${order.id}`, 20, currentY);
           
-          const names = [
-            'Amina Yusuf', 'John Kiprop', 'Sarah Wanjiku', 'David Omondi', 
-            'Grace Muthoni', 'Peter Njoroge', 'Fatuma Ibrahim', 'Michael Mwangi',
-            'Alice Atieno', 'Brian Kipkoech', 'Mercy Chepngetich', 'Emmanuel Kamau'
-          ];
-          const customerName = names[order.id % names.length];
-          doc.text(customerName.substring(0, 20), 55, currentY);
+          if (role === 'back-office') {
+            const sellerInfo = order.sellerName || 'System Admin';
+            doc.text(sellerInfo.substring(0, 20), 55, currentY);
+          } else {
+            const names = [
+              'Amina Yusuf', 'John Kiprop', 'Sarah Wanjiku', 'David Omondi', 
+              'Grace Muthoni', 'Peter Njoroge', 'Fatuma Ibrahim', 'Michael Mwangi',
+              'Alice Atieno', 'Brian Kipkoech', 'Mercy Chepngetich', 'Emmanuel Kamau'
+            ];
+            const customerName = names[order.id % names.length];
+            doc.text(customerName.substring(0, 20), 55, currentY);
+          }
 
           const dateObj = new Date(order.createdAt);
           const formattedDate = dateObj.toLocaleDateString('en-KE', {

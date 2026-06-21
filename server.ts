@@ -25,6 +25,7 @@ async function startServer() {
     deleteProduct, 
     createPOSOrder, 
     getUserOrders,
+    getAllOrders,
     getAllUsers,
     updateUserRole,
     updateTraderSubscription
@@ -204,7 +205,12 @@ async function startServer() {
   app.get("/api/pos/orders", requireAuth, async (req: any, res) => {
     try {
       const user = await getOrCreateUser(req.user.uid, req.user.email);
-      const orders = await getUserOrders(user.id);
+      let orders;
+      if (user.role === 'back-office') {
+        orders = await getAllOrders();
+      } else {
+        orders = await getUserOrders(user.id);
+      }
       res.json(orders);
     } catch (error: any) {
       res.status(500).json({ error: error.message });

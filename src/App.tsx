@@ -670,6 +670,7 @@ export default function App() {
                       products={products} 
                       onCheckout={handleCheckout} 
                       orders={orders}
+                      role={profile?.role || 'trader'}
                     />
                   )}
                   {activeTab === 'settings' && (

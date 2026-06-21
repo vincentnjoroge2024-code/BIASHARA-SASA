@@ -68,6 +68,8 @@ export interface POSOrder {
   paymentMethod: 'cash' | 'card' | 'mobile';
   items: POSOrderItem[];
   createdAt: string;
+  sellerName?: string;
+  sellerEmail?: string;
 }
 
 export interface Invoice {

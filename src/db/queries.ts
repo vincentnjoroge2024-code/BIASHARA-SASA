@@ -282,6 +282,23 @@ export async function getUserOrders(userId: number) {
       .orderBy(desc(posOrders.createdAt));
 }
 
+export async function getAllOrders() {
+    return await db.select({
+      id: posOrders.id,
+      userId: posOrders.userId,
+      orderNumber: posOrders.orderNumber,
+      totalAmount: posOrders.totalAmount,
+      paymentMethod: posOrders.paymentMethod,
+      createdAt: posOrders.createdAt,
+      sellerEmail: users.email,
+      sellerName: traders.fullName,
+    })
+      .from(posOrders)
+      .leftJoin(users, eq(posOrders.userId, users.id))
+      .leftJoin(traders, eq(users.traderId, traders.id))
+      .orderBy(desc(posOrders.createdAt));
+}
+
 export async function getAllUsers() {
   try {
     return await db.select()

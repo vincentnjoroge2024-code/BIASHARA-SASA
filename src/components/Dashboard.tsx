@@ -626,7 +626,15 @@ export function Dashboard({ traders, products, orders, role }: DashboardProps) {
                     </div>
                     <div>
                       <p className="font-bold text-brand-dark leading-none mb-1">{order.orderNumber}</p>
-                      <p className="text-[10px] font-medium text-slate-400 uppercase">{new Date(order.createdAt).toLocaleTimeString()}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-[10px] font-medium text-slate-400 uppercase">{new Date(order.createdAt).toLocaleTimeString()}</p>
+                        {role === 'back-office' && order.sellerName && (
+                          <>
+                            <span className="text-slate-200">|</span>
+                            <span className="text-[9px] font-black text-brand-blue uppercase">{order.sellerName}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="text-right">
@@ -730,6 +738,9 @@ export function Dashboard({ traders, products, orders, role }: DashboardProps) {
               <thead className="bg-slate-50 sticky top-0 z-10 shadow-sm">
                 <tr>
                   <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50">Transaction ID</th>
+                  {role === 'back-office' && (
+                    <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50">Seller/Trader</th>
+                  )}
                   <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50">Customer Name</th>
                   <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50">Settlement Date</th>
                   <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50 text-right">Settled Amount</th>
@@ -764,6 +775,12 @@ export function Dashboard({ traders, products, orders, role }: DashboardProps) {
                             </div>
                           </div>
                         </td>
+                        {role === 'back-office' && (
+                          <td className="px-6 py-4">
+                            <p className="font-bold text-brand-blue text-sm truncate max-w-[150px]">{order.sellerName || 'System Admin'}</p>
+                            <p className="text-[10px] text-slate-400 font-medium truncate max-w-[150px]">{order.sellerEmail}</p>
+                          </td>
+                        )}
                         <td className="px-6 py-4">
                           <p className="font-semibold text-slate-700 text-sm">{customerName}</p>
                           <p className="text-[10px] text-slate-400 font-medium">Standard Retail Contact</p>
