@@ -30,8 +30,8 @@ export default function App() {
   const [currentInvoice, setCurrentInvoice] = useState<Invoice | null>(null);
 
   // Email login / registration state
-  const [authEmail, setAuthEmail] = useState('Njoroge@biasharasasa.com');
-  const [authPassword, setAuthPassword] = useState('Biasharasasa123');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [authSubmitting, setAuthSubmitting] = useState(false);
@@ -55,7 +55,6 @@ export default function App() {
     } catch (err: any) {
       console.error(err);
       if (err.code === 'auth/operation-not-allowed') {
-        // If they did indeed try the admin email, we can try matching immediately, but we already catch that inside useAuth!
         setAuthError('Email/password registration is not enabled in Firebase. Please enter valid administrative or active trader credentials.');
       } else if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
         setAuthError('Invalid email or password. Please verify your administrative credentials.');
@@ -69,13 +68,6 @@ export default function App() {
     } finally {
       setAuthSubmitting(false);
     }
-  };
-
-  const handleAutofillAdmin = () => {
-    setAuthEmail('Njoroge@biasharasasa.com');
-    setAuthPassword('Biasharasasa123');
-    setIsRegistering(false);
-    setAuthError(null);
   };
 
   const showToast = useCallback((type: ToastType, message: string) => {
@@ -300,6 +292,7 @@ export default function App() {
         const order = await res.json();
         showToast('success', 'Transaction completed successfully');
         fetchProducts();
+        fetchOrders();
         return order;
       }
       const errData = await res.json();
