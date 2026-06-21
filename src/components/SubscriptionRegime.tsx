@@ -15,7 +15,8 @@ import {
   Search,
   Check,
   Lock,
-  RefreshCw
+  RefreshCw,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { TraderStats, UserProfile, Trader, SubscriptionPlan, TraderStatus } from '../types';
@@ -151,10 +152,10 @@ export function SubscriptionRegime({ stats, profile, traders, onUpdateSubscripti
                 <Sprout className="w-6 h-6" />
               </div>
               <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-none">Basic</h4>
-              <div className="flex items-baseline gap-1 mt-2 mb-4">
-                <span className="text-3xl font-black text-brand-dark">$0</span>
-                <span className="text-xs text-slate-400 font-semibold">/month</span>
-              </div>
+                <div className="flex items-baseline gap-1 mt-2 mb-4">
+                  <span className="text-3xl font-black text-brand-dark">KSh 0</span>
+                  <span className="text-xs text-slate-400 font-semibold">/month</span>
+                </div>
               <ul className="space-y-3.5 text-xs text-slate-500 flex-1 border-t border-slate-100 pt-4 mb-6">
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-brand-green shrink-0" />
@@ -165,7 +166,7 @@ export function SubscriptionRegime({ stats, profile, traders, onUpdateSubscripti
                   <span>Standard Thermal receipt printer setup</span>
                 </li>
                 <li className="flex items-center gap-2 text-slate-300">
-                  <XIcon />
+                  <X className="w-3.5 h-3.5" />
                   <span>Unlimited orders history logs</span>
                 </li>
               </ul>
@@ -197,10 +198,10 @@ export function SubscriptionRegime({ stats, profile, traders, onUpdateSubscripti
                 <Rocket className="w-6 h-6" />
               </div>
               <h4 className="text-sm font-bold text-brand-blue uppercase tracking-widest leading-none">Pro</h4>
-              <div className="flex items-baseline gap-1 mt-2 mb-4">
-                <span className="text-3xl font-black text-brand-dark">$29</span>
-                <span className="text-xs text-slate-400 font-semibold">/month</span>
-              </div>
+                <div className="flex items-baseline gap-1 mt-2 mb-4">
+                  <span className="text-3xl font-black text-brand-dark">KSh 2,900</span>
+                  <span className="text-xs text-slate-400 font-semibold">/month</span>
+                </div>
               <ul className="space-y-3.5 text-xs text-slate-600 flex-1 border-t border-brand-blue/10 pt-4 mb-6">
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-brand-green shrink-0" />
@@ -243,10 +244,10 @@ export function SubscriptionRegime({ stats, profile, traders, onUpdateSubscripti
                 <Building className="w-6 h-6" />
               </div>
               <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-none">Enterprise</h4>
-              <div className="flex items-baseline gap-1 mt-2 mb-4">
-                <span className="text-3xl font-black text-brand-dark">$99</span>
-                <span className="text-xs text-slate-400 font-semibold">/month</span>
-              </div>
+                <div className="flex items-baseline gap-1 mt-2 mb-4">
+                  <span className="text-3xl font-black text-brand-dark">KSh 9,900</span>
+                  <span className="text-xs text-slate-400 font-semibold">/month</span>
+                </div>
               <ul className="space-y-3.5 text-xs text-slate-500 flex-1 border-t border-slate-100 pt-4 mb-6">
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-brand-green shrink-0" />
@@ -477,8 +478,4 @@ export function SubscriptionRegime({ stats, profile, traders, onUpdateSubscripti
 
     </div>
   );
-}
-
-function XIcon() {
-  return <svg className="w-3.5 h-3.5 text-slate-300 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
 }

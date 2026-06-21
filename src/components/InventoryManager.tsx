@@ -266,7 +266,7 @@ export function InventoryManager({
                           </div>
                         </td>
                         <td className="px-6 py-4 font-mono text-xs text-slate-500">{product.sku}</td>
-                        <td className="px-6 py-4 font-bold text-slate-700">${(product.price / 100).toFixed(2)}</td>
+                        <td className="px-6 py-4 font-bold text-slate-700">KSh {(product.price / 100).toFixed(2)}</td>
                         <td className="px-6 py-4">
                           <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${isLowStock ? 'bg-brand-red/10 text-brand-red' : 'bg-brand-green/10 text-brand-green'}`}>
                             {product.stock} {t.inventory.units}
@@ -590,7 +590,7 @@ export function InventoryManager({
                       setBulkInputText(e.target.value);
                       parseCSVData(e.target.value);
                     }}
-                    placeholder="Product Name,SKU,Price,Category,Stock&#10;Premium Omo Soap,SOP-OMO-PRE,1.50,Soaps,120&#10;Cold Coke Soda,SDA-COK-CLS,0.80,Soda,150"
+                    placeholder="Product Name,SKU,Price,Category,Stock&#10;Tomatoes (1kg),VEG-TOM,120,Produce,100&#10;Milk 1L (Fresh),DAY-MLK-1L,160,Dairy,60"
                     rows={4}
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl outline-none text-xs font-mono font-medium focus:ring-2 focus:ring-brand-green text-slate-700"
                   />
@@ -615,7 +615,7 @@ export function InventoryManager({
                               <p className="text-[10px] text-slate-400 font-semibold">{p.sku} • {p.category}</p>
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-slate-700">${(p.price / 100).toFixed(2)}</p>
+                              <p className="font-bold text-slate-700">KSh {(p.price / 100).toFixed(2)}</p>
                               <p className="text-[10px] text-brand-green font-black">{p.initialStock} units</p>
                             </div>
                           </div>

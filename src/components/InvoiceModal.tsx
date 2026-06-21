@@ -26,7 +26,7 @@ Email: ${invoice.traderEmail}
 
 SUBSCRIPTION:
 Plan: ${invoice.plan}
-Amount: $${invoice.amount}
+Amount: KSh ${invoice.amount}
 
 Status: ${invoice.status.toUpperCase()}
     `;
@@ -78,7 +78,7 @@ Status: ${invoice.status.toUpperCase()}
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-slate-50">
                 <span className="text-slate-500 font-bold">Amount Due</span>
-                <span className="text-3xl font-black text-[#0b1a2e]">${invoice.amount}</span>
+                <span className="text-3xl font-black text-[#0b1a2e]">KSh {invoice.amount}</span>
               </div>
             </div>
 

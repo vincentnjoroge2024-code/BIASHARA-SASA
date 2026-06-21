@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, MapPin, Tag, ToggleRight, PlusCircle, Info } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Tag, ToggleRight, PlusCircle, Info, Database, CheckCircle } from 'lucide-react';
 import { SubscriptionPlan, TraderStatus } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -114,8 +114,8 @@ export function TraderForm({ onSubmit, traderCount }: TraderFormProps) {
               onChange={(e) => setFormData({ ...formData, plan: e.target.value as SubscriptionPlan })}
             >
               <option value="Basic">Basic · Free</option>
-              <option value="Pro">Pro · $29/mo</option>
-              <option value="Enterprise">Enterprise · $99/mo</option>
+              <option value="Pro">Pro · KSh 2,900/mo</option>
+              <option value="Enterprise">Enterprise · KSh 9,900/mo</option>
             </select>
           </div>
 
@@ -172,13 +172,4 @@ export function TraderForm({ onSubmit, traderCount }: TraderFormProps) {
       </div>
     </div>
   );
-}
-
-// Icons for local use to ensure they exist
-function CheckCircle({ className }: { className?: string }) {
-  return <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
-}
-
-function Database({ className }: { className?: string }) {
-  return <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
 }

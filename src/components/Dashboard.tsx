@@ -8,6 +8,7 @@ import {
   Activity,
   ArrowUpRight,
   DollarSign,
+  Banknote,
   TrendingDown,
   Calendar,
   BarChart3,
@@ -317,7 +318,7 @@ export function Dashboard({ traders, products, orders, role }: DashboardProps) {
     { 
       label: t.dashboard.totalRevenue, 
       value: `KSh ${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 
-      icon: <DollarSign className="w-6 h-6 text-brand-green" />, 
+      icon: <Banknote className="w-6 h-6 text-brand-green" />, 
       bg: 'bg-brand-green/5',
       trend: '+12.5%',
       visible: true

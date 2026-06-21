@@ -97,31 +97,29 @@ export async function getUserProducts(userId: number) {
 
   // List of standard products requested by the user to add to stock
   const defaultProducts = [
-    // Soaps
-    { name: "Omo", sku: "SOP-OMO", price: 150, stock: 100, category: "Soaps" },
-    { name: "Bar soap", sku: "SOP-BAR", price: 100, stock: 200, category: "Soaps" },
-    { name: "Detergent", sku: "SOP-DET", price: 350, stock: 500, category: "Soaps" },
-    { name: "Rexona", sku: "SOP-REX", price: 240, stock: 240, category: "Soaps" },
-    { name: "Geisha", sku: "SOP-GEI", price: 120, stock: 300, category: "Soaps" },
-    { name: "Blue soap", sku: "SOP-BLU", price: 110, stock: 150, category: "Soaps" },
+    // Groceries (Fruits & Veggies)
+    { name: "Tomatoes (1kg)", sku: "VEG-TOM", price: 12000, stock: 100, category: "Produce" },
+    { name: "Onions (1kg)", sku: "VEG-ONN", price: 10000, stock: 150, category: "Produce" },
+    { name: "Potatoes (1kg)", sku: "VEG-POT", price: 15000, stock: 200, category: "Produce" },
+    { name: "Cabbage (per head)", sku: "VEG-CAB", price: 8000, stock: 80, category: "Produce" },
+    { name: "Carrots (1kg)", sku: "VEG-CAR", price: 9000, stock: 120, category: "Produce" },
+    { name: "Bananas (bunch)", sku: "FRU-BAN", price: 25000, stock: 50, category: "Produce" },
 
-    // Juices
-    { name: "Embe Juice", sku: "JUC-EMB", price: 120, stock: 50, category: "Juices" },
-    { name: "Kevian Juice", sku: "JUC-KEV", price: 150, stock: 100, category: "Juices" },
-    { name: "Delmonte", sku: "JUC-DEL", price: 250, stock: 300, category: "Juices" },
-    { name: "Ginger flavour", sku: "JUC-GIN", price: 180, stock: 250, category: "Juices" },
+    // Dairy & Bakery
+    { name: "Milk 1L (Fresh)", sku: "DAY-MLK-1L", price: 16000, stock: 60, category: "Dairy" },
+    { name: "White Bread (400g)", sku: "BAK-BRD-SLC", price: 6500, stock: 40, category: "Bakery" },
+    { name: "Eggs (Tray of 30)", sku: "DAY-EGG-TR", price: 45000, stock: 30, category: "Dairy" },
 
-    // Soda
-    { name: "Fanta", sku: "SDA-FAN", price: 80, stock: 80, category: "Soda" },
-    { name: "Coke", sku: "SDA-COK", price: 80, stock: 80, category: "Soda" },
-    { name: "Sprite", sku: "SDA-SPR", price: 80, stock: 80, category: "Soda" },
-    { name: "Krest", sku: "SDA-KRE", price: 80, stock: 80, category: "Soda" },
+    // Pantry Essentials
+    { name: "Elianto Oil 2L", sku: "OIL-ELI-2L", price: 65000, stock: 50, category: "Pantry" },
+    { name: "Sugar 1kg", sku: "PAN-SUG-1K", price: 18000, stock: 100, category: "Pantry" },
+    { name: "Rice 1kg (Basmati)", sku: "PAN-RIC-1K", price: 24000, stock: 80, category: "Pantry" },
+    { name: "Wheat Flour 2kg", sku: "PAN-WHT-2K", price: 19500, stock: 120, category: "Pantry" },
 
-    // Oils
-    { name: "Elianto Oil", sku: "OIL-ELI", price: 300, stock: 120, category: "Oils" },
-    { name: "Jamia Oil", sku: "OIL-JAM", price: 280, stock: 125, category: "Oils" },
-    { name: "Salama Oil", sku: "OIL-SAL", price: 290, stock: 130, category: "Oils" },
-    { name: "Raha Oil", sku: "OIL-RAH", price: 270, stock: 120, category: "Oils" }
+    // Beverages
+    { name: "Coke 500ml", sku: "SDA-COK-500", price: 8000, stock: 200, category: "Soda" },
+    { name: "Fanta Orange 500ml", sku: "SDA-FAN-500", price: 8000, stock: 150, category: "Soda" },
+    { name: "Drinking Water 1.5L", sku: "BEV-WAT-15", price: 6000, stock: 100, category: "Water" }
   ];
 
   let addedNew = false;

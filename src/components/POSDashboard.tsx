@@ -745,18 +745,18 @@ export function POSDashboard({ products, onCheckout, orders = [], role }: POSDas
                   <div className="space-y-1 mb-2">
                     <div className="flex justify-between">
                       <span>2x Kenyan Tea Roll</span>
-                      <span className="font-bold">$4.50</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>1x Biashara Coffee</span>
-                      <span className="font-bold">$3.00</span>
-                    </div>
+                      <span className="font-bold">KSh 4.50</span>
+</div>
+<div className="flex justify-between">
+  <span>1x Biashara Coffee</span>
+  <span className="font-bold">KSh 3.00</span>
+</div>
                   </div>
 
                   <div className="border-t border-dashed border-slate-300 pt-1.5 space-y-1">
                     <div className="flex justify-between text-[9px] font-bold">
                       <span>TOTAL PAID:</span>
-                      <span className="text-brand-green font-black">$7.50</span>
+                      <span className="text-brand-green font-black">KSh 7.50</span>
                     </div>
                   </div>
 
