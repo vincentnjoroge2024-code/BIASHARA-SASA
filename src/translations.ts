@@ -44,6 +44,7 @@ export interface Translations {
   };
   traderList: {
     title: string;
+    search: string;
     export: string;
     tradersCount: string;
     noTraders: string;
@@ -174,6 +175,7 @@ export const translations: Record<Language, Translations> = {
     },
     traderList: {
       title: "All Traders",
+      search: "Search traders by name or email...",
       export: "Export List",
       tradersCount: "trader",
       noTraders: "No traders onboarded yet.",
@@ -302,6 +304,7 @@ export const translations: Record<Language, Translations> = {
     },
     traderList: {
       title: "Tous les commerçants",
+      search: "Rechercher des commerçants par nom ou e-mail...",
       export: "Exporter la liste",
       tradersCount: "commerçant",
       noTraders: "Aucun commerçant intégré.",
@@ -430,6 +433,7 @@ export const translations: Record<Language, Translations> = {
     },
     traderList: {
       title: "Wafanyabiashara Wote",
+      search: "Tafuta wafanyabiashara kwa jina au barua pepe...",
       export: "Hamisha Orodha",
       tradersCount: "mfanyabiashara",
       noTraders: "Hakuna wafanyabiashara waliosajiliwa bado.",
