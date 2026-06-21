@@ -276,38 +276,54 @@ export async function createPOSOrder(userId: number, data: { totalAmount: number
 }
 
 export async function getUserOrders(userId: number) {
-    return await db.select({
-      id: posOrders.id,
-      userId: posOrders.userId,
-      orderNumber: posOrders.orderNumber,
-      totalAmount: posOrders.totalAmount,
-      paymentMethod: posOrders.paymentMethod,
-      createdAt: posOrders.createdAt,
-      sellerEmail: users.email,
-      sellerName: traders.fullName,
-    })
-      .from(posOrders)
-      .where(eq(posOrders.userId, userId))
-      .leftJoin(users, eq(posOrders.userId, users.id))
-      .leftJoin(traders, eq(users.traderId, traders.id))
-      .orderBy(desc(posOrders.createdAt));
+  try {
+    const orders = await db.query.posOrders.findMany({
+      where: eq(posOrders.userId, userId),
+      with: {
+        items: true,
+        owner: {
+          with: {
+            traders: true
+          }
+        }
+      },
+      orderBy: [desc(posOrders.createdAt)],
+    });
+
+    return orders.map(order => ({
+      ...order,
+      sellerEmail: order.owner?.email,
+      sellerName: order.owner?.traders?.[0]?.fullName
+    }));
+  } catch (error) {
+    console.error("Database query failed (getUserOrders):", error);
+    throw new Error("Failed to fetch user orders.", { cause: error });
+  }
 }
 
 export async function getAllOrders() {
-    return await db.select({
-      id: posOrders.id,
-      userId: posOrders.userId,
-      orderNumber: posOrders.orderNumber,
-      totalAmount: posOrders.totalAmount,
-      paymentMethod: posOrders.paymentMethod,
-      createdAt: posOrders.createdAt,
-      sellerEmail: users.email,
-      sellerName: traders.fullName,
-    })
-      .from(posOrders)
-      .leftJoin(users, eq(posOrders.userId, users.id))
-      .leftJoin(traders, eq(users.traderId, traders.id))
-      .orderBy(desc(posOrders.createdAt));
+  try {
+    const orders = await db.query.posOrders.findMany({
+      with: {
+        items: true,
+        owner: {
+          with: {
+            traders: true
+          }
+        }
+      },
+      orderBy: [desc(posOrders.createdAt)],
+    });
+
+    return orders.map(order => ({
+      ...order,
+      sellerEmail: order.owner?.email,
+      sellerName: order.owner?.traders?.[0]?.fullName
+    }));
+  } catch (error) {
+    console.error("Database query failed (getAllOrders):", error);
+    throw new Error("Failed to fetch all orders.", { cause: error });
+  }
 }
 
 export async function getAllUsers() {

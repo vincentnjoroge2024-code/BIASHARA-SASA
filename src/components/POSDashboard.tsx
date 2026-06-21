@@ -21,6 +21,20 @@ export function POSDashboard({ products, onCheckout, orders = [], role }: POSDas
   const [searchTerm, setSearchTerm] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastOrder, setLastOrder] = useState<POSOrder | null>(null);
+  const [isReviewing, setIsReviewing] = useState(false);
+  const [editingPriceId, setEditingPriceId] = useState<number | null>(null);
+
+  const updatePrice = (id: number, newPrice: number) => {
+    setCart(prev => {
+      const existing = prev[id];
+      if (!existing) return prev;
+      return {
+        ...prev,
+        [id]: { ...existing, product: { ...existing.product, price: newPrice } }
+      };
+    });
+    setEditingPriceId(null);
+  };
   const [showPrinterOptions, setShowPrinterOptions] = useState(false);
   const [printerOptions, setPrinterOptions] = useState({
     paperWidth: '80mm', // '80mm' | '58mm' | 'standard'
@@ -79,7 +93,12 @@ export function POSDashboard({ products, onCheckout, orders = [], role }: POSDas
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) return;
+    setIsReviewing(true);
+  };
+
+  const confirmCheckout = async () => {
     setIsProcessing(true);
+    setIsReviewing(false);
     try {
       const orderData = {
         totalAmount: grandTotal,
@@ -889,7 +908,31 @@ export function POSDashboard({ products, onCheckout, orders = [], role }: POSDas
                   <div key={item.product.id} className="bg-white/10 p-4 rounded-2xl space-y-3">
                     <div className="flex justify-between items-start gap-2">
                       <span className="text-white font-bold text-sm leading-tight">{item.product.name}</span>
-                      <span className="text-brand-blue font-black text-sm">KSh {((item.product.price * item.quantity) / 100).toFixed(2)}</span>
+                      <div className="text-right">
+                        {editingPriceId === item.product.id ? (
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              defaultValue={item.product.price / 100}
+                              onBlur={(e) => updatePrice(item.product.id, Math.round(parseFloat(e.target.value) * 100))}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') updatePrice(item.product.id, Math.round(parseFloat((e.target as HTMLInputElement).value) * 100));
+                              }}
+                              autoFocus
+                              className="w-16 bg-slate-800 text-white text-[10px] border border-brand-blue/50 rounded px-1 py-0.5 outline-none"
+                            />
+                          </div>
+                        ) : (
+                          <span 
+                            onClick={() => setEditingPriceId(item.product.id)}
+                            className="text-brand-blue font-black text-sm cursor-pointer hover:underline"
+                            title="Click to override price"
+                          >
+                            KSh {((item.product.price * item.quantity) / 100).toFixed(2)}
+                          </span>
+                        )}
+                        <p className="text-[9px] text-white/30">KSh {(item.product.price / 100).toFixed(2)} each</p>
+                      </div>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -979,6 +1022,76 @@ export function POSDashboard({ products, onCheckout, orders = [], role }: POSDas
             </div>
           </div>
         </div>
+
+      <AnimatePresence>
+        {isReviewing && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-white rounded-[32px] w-full max-w-md overflow-hidden shadow-2xl"
+            >
+              <div className="p-8 text-center bg-slate-50 border-b border-slate-100">
+                <div className="w-16 h-16 bg-brand-blue/10 rounded-full flex items-center justify-center text-brand-blue mx-auto mb-4">
+                  <ShoppingCart className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-black text-slate-800">Review Transaction</h3>
+                <p className="text-slate-500 text-sm mt-1">Verify details before final posting</p>
+              </div>
+
+              <div className="p-8 space-y-6">
+                <div className="space-y-3">
+                  {cartItems.map((item, idx) => (
+                    <div key={idx} className="flex justify-between items-center text-sm">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-slate-700">{item.product.name}</span>
+                        <span className="text-[10px] text-slate-400">Qty: {item.quantity} × KSh {(item.product.price / 100).toFixed(2)}</span>
+                      </div>
+                      <span className="font-black text-slate-900 text-right">KSh {((item.product.price * item.quantity) / 100).toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-4 border-t border-dashed border-slate-200">
+                  <div className="flex justify-between items-center text-slate-400 text-xs font-bold uppercase mb-2">
+                    <span>Customer</span>
+                    <span className="text-slate-600">{selectedCustomer}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-slate-400 text-xs font-bold uppercase mb-4">
+                    <span>Payment Method</span>
+                    <span className="text-brand-blue">{paymentMethod.toUpperCase()}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-800 font-black text-lg">Total Payable</span>
+                    <span className="text-brand-blue font-black text-3xl">KSh {(grandTotal / 100).toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 pt-4">
+                  <button
+                    onClick={() => setIsReviewing(false)}
+                    className="w-full py-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-bold transition-all"
+                  >
+                    Edit Details
+                  </button>
+                  <button
+                    onClick={confirmCheckout}
+                    disabled={isProcessing}
+                    className="w-full py-4 bg-brand-green hover:bg-brand-green/90 text-white rounded-2xl font-black shadow-lg shadow-brand-green/20 transition-all flex items-center justify-center gap-2"
+                  >
+                    {isProcessing ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>Complete Sale <CheckCircle className="w-5 h-5" /></>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {lastOrder && (

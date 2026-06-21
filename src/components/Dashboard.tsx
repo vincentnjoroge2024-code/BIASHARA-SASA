@@ -78,6 +78,17 @@ const CustomBarTooltip = ({ active, payload }: any) => {
 export function Dashboard({ traders, products, orders, role }: DashboardProps) {
   const { t, language } = useLanguage();
   const [chartMetric, setChartMetric] = useState<'revenue' | 'sales'>('revenue');
+  const [transactionSearch, setTransactionSearch] = useState('');
+
+  const filteredOrders = useMemo(() => {
+    if (!transactionSearch) return orders;
+    const term = transactionSearch.toLowerCase();
+    return orders.filter(o => 
+      o.orderNumber.toLowerCase().includes(term) ||
+      (o.sellerName && o.sellerName.toLowerCase().includes(term)) ||
+      (o.sellerEmail && o.sellerEmail.toLowerCase().includes(term))
+    );
+  }, [orders, transactionSearch]);
 
   const totalRevenue = orders.reduce((acc, order) => acc + order.totalAmount, 0) / 100;
   const lowStockCount = products.filter(p => p.stock < 10).length;
@@ -714,22 +725,36 @@ export function Dashboard({ traders, products, orders, role }: DashboardProps) {
         transition={{ delay: 0.3 }}
         className="bg-white rounded-[32px] border border-slate-100 p-8 shadow-sm space-y-6"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h3 className="text-xl font-bold text-brand-dark flex items-center gap-3">
-              <ShoppingCart className="w-5 h-5 text-brand-green" />
-              <span>POS Order Settlement Ledger</span>
-            </h3>
-            <p className="text-slate-400 text-xs font-semibold mt-1">
-              Scrollable ledger displaying all recent checkouts, customer identification, and transaction timestamps.
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4 flex-1">
+              <div className="relative flex-1 max-w-sm">
+                <Activity className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Filter by Order # or Seller Name..."
+                  value={transactionSearch}
+                  onChange={(e) => setTransactionSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm outline-none focus:border-brand-blue/50 transition-all font-medium"
+                />
+              </div>
+              <div className="hidden sm:block">
+                <h3 className="text-xl font-bold text-brand-dark flex items-center gap-3">
+                  <ShoppingCart className="w-5 h-5 text-brand-green" />
+                  <span>POS Settlement Ledger</span>
+                </h3>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] bg-brand-light-green text-brand-green px-3 py-1 rounded-full font-black uppercase tracking-wider">
+                Total Recorded: {orders.length}
+              </span>
+              {transactionSearch && (
+                <span className="text-[10px] bg-brand-blue/10 text-brand-blue px-3 py-1 rounded-full font-black uppercase tracking-wider">
+                  Matches: {filteredOrders.length}
+                </span>
+              )}
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] bg-brand-light-green text-brand-green px-3 py-1 rounded-full font-black uppercase tracking-wider">
-              Total Recorded: {orders.length}
-            </span>
-          </div>
-        </div>
 
         {/* Scrollable Container with responsive table */}
         <div className="border border-slate-100 rounded-2xl overflow-hidden bg-white">
@@ -747,8 +772,8 @@ export function Dashboard({ traders, products, orders, role }: DashboardProps) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-sans">
-                {orders.length > 0 ? (
-                  orders.map((order) => {
+                {filteredOrders.length > 0 ? (
+                  filteredOrders.map((order) => {
                     // Seed lists of realistic local customer names deterministically based on order ID
                     const names = [
                       'Amina Yusuf', 'John Kiprop', 'Sarah Wanjiku', 'David Omondi', 
