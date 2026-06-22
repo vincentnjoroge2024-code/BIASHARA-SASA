@@ -227,6 +227,34 @@ async function startServer() {
     }
   });
 
+  app.post("/api/pos/orders/sync", requireAuth, async (req: any, res) => {
+    try {
+      const user = await getOrCreateUser(req.user.uid, req.user.email);
+      const { orders } = req.body;
+      if (!Array.isArray(orders)) {
+        return res.status(400).json({ error: "Invalid payload format. Expected an array of orders." });
+      }
+
+      const results = [];
+      const { createPOSOrder: createOrderFunc } = await import("./src/db/queries.ts");
+      for (const orderData of orders) {
+        try {
+          const created = await createOrderFunc(user.id, {
+            totalAmount: orderData.totalAmount,
+            paymentMethod: orderData.paymentMethod || 'cash',
+            items: orderData.items || []
+          });
+          results.push({ orderNumber: created.orderNumber, success: true });
+        } catch (itemErr: any) {
+          results.push({ success: false, error: itemErr.message });
+        }
+      }
+      res.json({ success: true, processed: results.length, details: results });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

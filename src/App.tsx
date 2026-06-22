@@ -667,7 +667,15 @@ export default function App() {
                     />
                   )}
                   {activeTab === 'settings' && (
-                    <Settings profile={profile} getToken={getToken} />
+                    <Settings 
+                      profile={profile} 
+                      getToken={getToken} 
+                      products={products}
+                      onSyncComplete={() => {
+                        fetchProducts();
+                        fetchOrders();
+                      }}
+                    />
                   )}
                   {activeTab === 'regime' && (
                     <SubscriptionRegime 
